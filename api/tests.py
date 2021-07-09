@@ -62,6 +62,7 @@ class TestPostAndGetJobsEndpoint(APITestCase):
 class TestGetPUTAndDeleteJobEndpoint(APITestCase):
 
     def test_get_job_by_id(self):
+        """ test that a job can be accessed with its ID """
         payload = {
             "company_name": "Access Bank",
             "company_email": "info@accessdlbank.com",
@@ -78,6 +79,7 @@ class TestGetPUTAndDeleteJobEndpoint(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_put_job_by_id(self):
+        """ test that a job ad can be edited """
         payload = {
             "company_name": "Access Bank",
             "company_email": "info@accessdlbank.com",
@@ -94,3 +96,21 @@ class TestGetPUTAndDeleteJobEndpoint(APITestCase):
         response = client.put(BASE_URL +'jobs/' + id, {"company_name": "Zenith Bank",})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_delete_job_by_id(self):
+        """ test that a job ad can be deleted """
+        payload = {
+            "company_name": "Access Bank",
+            "company_email": "info@accessdlbank.com",
+            "job_title": "Bank Teller",
+            "job_description": "Ensure that customers are attended to promptly",
+            "salary": 90000,
+            "city": "Ikeja",
+            "state": "Lagos",
+            "is_available": True
+        }
+        res = client.post(BASE_URL +'jobs', payload)
+        id = res.data['data']['status']['id']
+        
+        respone = client.delete(BASE_URL +'jobs/' + id)
+        self.assertEqual(respone.status_code, status.HTTP_204_NO_CONTENT)
+        

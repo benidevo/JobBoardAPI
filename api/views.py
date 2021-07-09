@@ -37,4 +37,11 @@ class JobOffersById(APIView):
             serializer.save()
             return Response(data={'message': 'you have successfully updated your job ad'}, status=status.HTTP_200_OK)
         return Response(errors=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        delete_job = get_object_or_404(JobOffer, id=id)
+        serializer = JobOfferSerializer(data=request.data)
+        if serializer.is_valid():
+            delete_job.delete()
+        return Response(data={'data': serializer.data}, status=status.HTTP_204_NO_CONTENT)
         
